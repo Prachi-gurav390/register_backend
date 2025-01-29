@@ -8,7 +8,7 @@ const { OAuth2Client } = require('google-auth-library');
 const authRoutes = require('./routes/auth');
 const studentRoutes = require('./routes/students');
 const guardRoutes = require('./routes/guards');
-const logRoutes = require('./routes/logs');
+const logRoutes = require('./routes/Logs');
 
 dotenv.config();
 const app = express();
