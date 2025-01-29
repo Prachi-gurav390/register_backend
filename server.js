@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-frontend-domain.vercel.app'],
+  origin: ['http://localhost:3000', 'https://register-frontend-six.vercel.app'],
   credentials: true
 }));
 app.use(express.json());
