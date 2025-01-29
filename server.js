@@ -15,7 +15,9 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: ['http://localhost:3000', 'https://register-frontend-six.vercel.app'],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
 }));
 app.use(express.json());
 
