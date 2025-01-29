@@ -17,9 +17,11 @@ app.use(cors({
   origin: ['http://localhost:3000', 'https://register-frontend-six.vercel.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
+  allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
 }));
 app.use(express.json());
+
+app.options('*', cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
