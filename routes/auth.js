@@ -9,7 +9,8 @@ const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 // List of authorized guard emails
 const AUTHORIZED_GUARD_EMAILS = [
     'prachigurav.390@gmail.com',
-    'pikugurav007@gmail.com'
+    'pikugurav007@gmail.com',
+    '2002devesh.sharma@gmail.com',
     // Add more authorized guard emails
 ];
 
