@@ -1,4 +1,3 @@
-// routes/logs.js
 const express = require('express');
 const router = express.Router();
 // const { Log, Student, Guard } = require('../models/index');
@@ -94,7 +93,7 @@ router.get('/outside', async (req, res) => {
     const logs = await Log.find({
       $and: [
         { 'outApproval.status': 'approved' },
-        { 'inApproval.status': 'blank' }
+        { 'inApproval.status': { $in: ['blank', 'pending'] } }
       ]
     })
       .populate('student')
