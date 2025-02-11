@@ -3,9 +3,10 @@ const express = require('express');
 const router = express.Router();
 const { Guard } = require('../models/Guard');
 const { Log } = require('../models/Log');
+const auth = require('../middleware/auth');
 
 // Get all guards
-router.get('/', async (req, res) => {
+router.get('/',auth, async (req, res) => {
     try {
         const guards = await Guard.find({}, { password: 0 });
         res.json(guards);
@@ -15,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get guard by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id',auth, async (req, res) => {
     try {
         const guard = await Guard.findById(req.params.id, { password: 0 });
         if (!guard) {
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update guard profile
-    router.patch('/:id', async (req, res) => {
+    router.patch('/:id',auth, async (req, res) => {
         try {
             const { contactNumber } = req.body;
             const guard = await Guard.findById(req.params.id);
@@ -47,8 +48,7 @@ router.get('/:id', async (req, res) => {
         }
     });
 
-// Delete guard (admin only)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',auth, async (req, res) => {
     try {
         const guard = await Guard.findByIdAndDelete(req.params.id);
         if (!guard) {
@@ -61,7 +61,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Get guard's approval history
-router.get('/:id/approvals', async (req, res) => {
+router.get('/:id/approvals',auth, async (req, res) => {
     try {
         const logs = await Log.find({
             $or: [

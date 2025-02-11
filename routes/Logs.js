@@ -4,9 +4,10 @@ const router = express.Router();
 const { Log } = require('../models/Log');
 const { Student } = require('../models/Student');
 const { Guard } = require('../models/Guard');
+const auth = require('../middleware/auth');
 
 // Create new outing request
-router.post('/request-out', async (req, res) => {
+router.post('/request-out',  auth, async (req, res) => {
   try {
     const { studentId, location } = req.body;
 
@@ -25,7 +26,7 @@ router.post('/request-out', async (req, res) => {
 });
 
 // Request return entry
-router.post('/request-in/:logId', async (req, res) => {
+router.post('/request-in/:logId', auth, async (req, res) => {
   try {
     const log = await Log.findById(req.params.logId);
     if (!log) {
@@ -43,7 +44,7 @@ router.post('/request-in/:logId', async (req, res) => {
 });
 
 // Get student's logs
-router.get('/student/:studentId', async (req, res) => {
+router.get('/student/:studentId',auth, async (req, res) => {
   try {
     const logs = await Log.find({ student: req.params.studentId })
       .populate('student')
@@ -57,7 +58,7 @@ router.get('/student/:studentId', async (req, res) => {
 });
 
 // Get all logs (for guards)
-router.get('/all', async (req, res) => {
+router.get('/all', auth, async (req, res) => {
   try {
     const logs = await Log.find()
       .populate('student')
@@ -71,7 +72,7 @@ router.get('/all', async (req, res) => {
 });
 
 // Get pending requests
-router.get('/pending', async (req, res) => {
+router.get('/pending', auth, async (req, res) => {
   try {
     const logs = await Log.find({
       $or: [
@@ -88,7 +89,7 @@ router.get('/pending', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-router.get('/outside', async (req, res) => {
+router.get('/outside',  auth,async (req, res) => {
   try {
     const logs = await Log.find({
       $and: [
@@ -107,7 +108,7 @@ router.get('/outside', async (req, res) => {
 });
 
 // Approve request
-router.patch('/approve/:logId', async (req, res) => {
+router.patch('/approve/:logId', auth,async (req, res) => {
   try {
     const { guardId, type } = req.body;
     const log = await Log.findById(req.params.logId);

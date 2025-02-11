@@ -1,10 +1,71 @@
-// routes/students.js
+// const express = require('express');
+// const router = express.Router();
+// const { Student } = require('../models/Student');
+
+// // Get all students
+// router.get('/', async (req, res) => {
+//     try {
+//         const students = await Student.find({}, { password: 0 });
+//         res.json(students);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// });
+
+// // Get student by ID
+// router.get('/:id', async (req, res) => {
+//     try {
+//         const student = await Student.findById(req.params.id, { password: 0 });
+//         if (!student) {
+//             return res.status(404).json({ message: 'Student not found' });
+//         }
+//         res.json(student);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// });
+
+// // Update student profile
+// router.patch('/:id', async (req, res) => {
+//     try {
+//         const { contactNumber, roomNumber } = req.body;
+//         const student = await Student.findById(req.params.id);
+
+//         if (!student) {
+//             return res.status(404).json({ message: 'Student not found' });
+//         }
+
+//         if (contactNumber) student.contactNumber = contactNumber;
+//         if (roomNumber) student.roomNumber = roomNumber;
+
+//         await student.save();
+//         res.json(student);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// });
+
+// router.delete('/:id', async (req, res) => {
+//     try {
+//         const student = await Student.findByIdAndDelete(req.params.id);
+//         if (!student) {
+//             return res.status(404).json({ message: 'Student not found' });
+//         }
+//         res.json({ message: 'Student deleted successfully' });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// });
+
+// module.exports = router;
+
 const express = require('express');
 const router = express.Router();
 const { Student } = require('../models/Student');
+const auth = require('../middleware/auth');
 
 // Get all students
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const students = await Student.find({}, { password: 0 });
         res.json(students);
@@ -14,7 +75,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get student by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
     try {
         const student = await Student.findById(req.params.id, { password: 0 });
         if (!student) {
@@ -27,7 +88,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update student profile
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', auth,async (req, res) => {
     try {
         const { contactNumber, roomNumber } = req.body;
         const student = await Student.findById(req.params.id);
@@ -46,8 +107,7 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
-// Delete student (admin only)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',auth, async (req, res) => {
     try {
         const student = await Student.findByIdAndDelete(req.params.id);
         if (!student) {

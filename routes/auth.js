@@ -3,6 +3,7 @@ const router = express.Router();
 const { OAuth2Client } = require('google-auth-library');
 const { Student } = require('../models/Student');
 const { Guard } = require('../models/Guard');
+const jwt = require('jsonwebtoken');
 
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
@@ -11,7 +12,6 @@ const AUTHORIZED_GUARD_EMAILS = [
     'prachigurav.390@gmail.com',
     'pikugurav007@gmail.com',
     '2002devesh.sharma@gmail.com',
-    // Add more authorized guard emails
 ];
 
 async function verifyGoogleToken(token) {
@@ -91,7 +91,15 @@ router.post('/login', async (req, res) => {
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-
+            const token = jwt.sign(
+                {
+                    id: user._id,
+                    email: user.email,
+                    type: type
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
             res.json({
                 user: {
                     id: user._id,
@@ -102,7 +110,8 @@ router.post('/login', async (req, res) => {
                     roomNumber: user.roomNumber,
                     rollNumber: user.rollNumber,
                     type
-                }
+                },
+                token
             });
         }
         else {
@@ -112,7 +121,15 @@ router.post('/login', async (req, res) => {
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-
+            const token = jwt.sign(
+                {
+                    id: user._id,
+                    email: user.email,
+                    type: type
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
             res.json({
                 user: {
                     id: user._id,
@@ -120,24 +137,10 @@ router.post('/login', async (req, res) => {
                     email: user.email,
                     contactNumber: user.contactNumber,
                     type
-                }
+                },
+                token
             });
         }
-        // const Model = type === 'student' ? Student : Guard;
-        // const user = await Model.findOne({ email: payload.email });
-
-        // if (!user) {
-        //     return res.status(404).json({ message: 'User not found' });
-        // }
-
-        // res.json({
-        //     user: {
-        //         id: user._id,
-        //         name: user.name,
-        //         email: user.email,
-        //         type
-        //     }
-        // });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

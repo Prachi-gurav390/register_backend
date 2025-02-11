@@ -1,4 +1,4 @@
-// models/Guard.js
+
 const mongoose = require('mongoose');
 
 const guardSchema = new mongoose.Schema({

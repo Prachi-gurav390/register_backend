@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { OAuth2Client } = require('google-auth-library');
+
+// const { OAuth2Client } = require('google-auth-library');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -12,15 +13,8 @@ const logRoutes = require('./routes/Logs');
 
 dotenv.config();
 const app = express();
-// Middleware
-// app.use(cors({
-//   origin: ['http://localhost:3000', 'https://register-frontend-six.vercel.app'],
-//   credentials: true,
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
-// }));
 
-// app.options('*', cors());
+// Middleware
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -35,7 +29,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
 
@@ -59,16 +53,8 @@ app.use('/api/students', studentRoutes);
 app.use('/api/guards', guardRoutes);
 app.use('/api/logs', logRoutes);
 
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-//   console.log('- POST /api/auth/student/register');
-// });
-
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 module.exports = app;
